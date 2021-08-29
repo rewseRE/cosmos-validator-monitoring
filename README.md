@@ -5,7 +5,7 @@ This shell script checks node health, voting power, validator position and sent 
 bash, curl, jq
 <br/>
 #### Installation
-Set the variables in file monitor.sh and run script
+Set the variables in file monitor.sh and run script.
 ```bash
 # Node name, e.g. "Cosmos"
 NODE_NAME=""
