@@ -31,31 +31,35 @@ echo 'LAST_POWER="'"$VOTING_POWER"'"' >> $LOG_FILE
 echo 'LAST_POSITION="'"$POSITION"'"' >> $LOG_FILE
 
 if [[ $LAST_POSITION != $POSITION ]]; then
-    MSG="Position changed $LAST_POSITION -> $POSITION"
+    MSG="position changed $LAST_POSITION -> $POSITION"
 fi
 
 if [[ $LAST_POWER -ne $VOTING_POWER ]]; then
-    MSG="Voting power changed $LAST_POWER -> $VOTING_POWER"
+    DIFF=$(($VOTING_POWER - $LAST_POWER))
+    if [[ $DIFF -gt 0 ]]; then
+        DIFF="%2B$DIFF"
+    fi
+    MSG="voting power changed $DIFF%0A($LAST_POWER -> $VOTING_POWER)"
 fi
 
 if [[ $LAST_BLOCK -ge $LATEST_BLOCK ]]; then
-    MSG="Node is probably stuck at block $LATEST_BLOCK"
+    MSG="node is probably stuck at block $LATEST_BLOCK"
 fi
 
 if [[ $VOTING_POWER -lt 1 ]]; then
-    MSG="Validator inactive. Voting power $VOTING_POWER"
+    MSG="validator inactive. Voting power $VOTING_POWER"
 fi
 
 if [[ $LATEST_BLOCK < $REAL_BLOCK ]]; then
-    MSG="Node is unsync, not catching up. $LATEST_BLOCK -> $REAL_BLOCK"
+    MSG="node is unsync, not catching up. $LATEST_BLOCK -> $REAL_BLOCK"
 fi
 
 if [[ $CATCHING_UP = "true" ]]; then
-    MSG="Node is unsync, catching up. $LATEST_BLOCK -> $REAL_BLOCK"
+    MSG="node is unsync, catching up. $LATEST_BLOCK -> $REAL_BLOCK"
 fi
 
 if [[ $REAL_BLOCK -eq 0 ]]; then
-    MSG="Can't connect to $SIDE_RPC"
+    MSG="can't connect to $SIDE_RPC"
 fi
 
 if [[ $MSG != "" ]]; then
