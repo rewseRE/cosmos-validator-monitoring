@@ -39,7 +39,7 @@ if [[ $VOTING_POWER -lt 1 ]]; then
     MSG="validator inactive. Voting power $VOTING_POWER"
 fi
 
-if [[ $LATEST_BLOCK < $REAL_BLOCK -1 ]]; then
+if (( $LATEST_BLOCK < $REAL_BLOCK - 1 )); then
     MSG="node is unsync, not catching up. $LATEST_BLOCK -> $REAL_BLOCK"
 fi
 
