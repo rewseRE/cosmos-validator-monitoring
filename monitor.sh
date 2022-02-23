@@ -1,17 +1,6 @@
 #!/bin/bash
 
-# Node name, e.g. "Cosmos"
-NODE_NAME=""
-# File name for saving parameters, e.g. "cosmos.log"
-LOG_FILE=""
-# Your node RPC address, e.g. "http://127.0.0.1:26657"
-NODE_RPC=""
-# Trusted node RPC address, e.g. "https://rpc.cosmos.network:26657"
-SIDE_RPC=""
-# Telegram bot API
-TG_BOT=""
-# Telegram chat ID
-TG_ID=""
+source $(dirname $(readlink -e $0))/config
 
 MSG=""
 LOG_FILE=$(dirname $(readlink -e $0))/$LOG_FILE
@@ -50,7 +39,7 @@ if [[ $VOTING_POWER -lt 1 ]]; then
     MSG="validator inactive. Voting power $VOTING_POWER"
 fi
 
-if [[ $LATEST_BLOCK < $REAL_BLOCK ]]; then
+if [[ $LATEST_BLOCK < $REAL_BLOCK -1 ]]; then
     MSG="node is unsync, not catching up. $LATEST_BLOCK -> $REAL_BLOCK"
 fi
 
