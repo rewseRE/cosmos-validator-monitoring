@@ -3,7 +3,7 @@
 source $(dirname $(readlink -e $0))/config
 
 MSG=""
-LAST_STATUS_FILE=$(dirname $(readlink -e $0))/$LAST_STATUS_FILE
+LAST_STATUS_FILE=$(dirname $(readlink -e $0))/last_status
 REAL_BLOCK=$(curl -# "$SIDE_RPC/status" | jq '.result.sync_info.latest_block_height' | xargs )
 STATUS=$(curl -# "$NODE_RPC/status")
 CATCHING_UP=$(echo $STATUS | jq '.result.sync_info.catching_up')
@@ -12,8 +12,6 @@ VOTING_POWER=$(echo $STATUS | jq '.result.validator_info.voting_power' | xargs )
 ADDRESS=$(echo $STATUS | jq '.result.validator_info.address' | xargs )
 POSITION=$(expr $(curl -# "$SIDE_RPC/validators?per_page=256" | jq "[.result.validators[].address] | index(\"$ADDRESS\")") + 1)
 source $LAST_STATUS_FILE
-
-#echo $POSITION $CATCHING_UP $LAST_BLOCK $LATEST_BLOCK $REAL_BLOCK $VOTING_POWER
 
 echo 'LAST_BLOCK="'"$LATEST_BLOCK"'"' > $LAST_STATUS_FILE
 echo 'LAST_POWER="'"$VOTING_POWER"'"' >> $LAST_STATUS_FILE
