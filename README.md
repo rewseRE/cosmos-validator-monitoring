@@ -9,8 +9,6 @@ Set the variables in config file and run script.
 ```bash
 # Node name, e.g. "Cosmos"
 NODE_NAME=""
-# File name for saving parameters, e.g. "cosmos.log"
-LOG_FILE=""
 # Your node RPC address, e.g. "http://127.0.0.1:26657"
 NODE_RPC=""
 # Trusted node RPC address, e.g. "https://rpc.cosmos.network:26657"

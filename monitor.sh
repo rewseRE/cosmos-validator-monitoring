@@ -3,7 +3,7 @@
 source $(dirname $(readlink -e $0))/config
 
 MSG=""
-LOG_FILE=$(dirname $(readlink -e $0))/$LOG_FILE
+LAST_STATUS_FILE=$(dirname $(readlink -e $0))/$LAST_STATUS_FILE
 REAL_BLOCK=$(curl -# "$SIDE_RPC/status" | jq '.result.sync_info.latest_block_height' | xargs )
 STATUS=$(curl -# "$NODE_RPC/status")
 CATCHING_UP=$(echo $STATUS | jq '.result.sync_info.catching_up')
@@ -11,13 +11,13 @@ LATEST_BLOCK=$(echo $STATUS | jq '.result.sync_info.latest_block_height' | xargs
 VOTING_POWER=$(echo $STATUS | jq '.result.validator_info.voting_power' | xargs )
 ADDRESS=$(echo $STATUS | jq '.result.validator_info.address' | xargs )
 POSITION=$(expr $(curl -# "$SIDE_RPC/validators?per_page=256" | jq "[.result.validators[].address] | index(\"$ADDRESS\")") + 1)
-source $LOG_FILE
+source $LAST_STATUS_FILE
 
 #echo $POSITION $CATCHING_UP $LAST_BLOCK $LATEST_BLOCK $REAL_BLOCK $VOTING_POWER
 
-echo 'LAST_BLOCK="'"$LATEST_BLOCK"'"' > $LOG_FILE
-echo 'LAST_POWER="'"$VOTING_POWER"'"' >> $LOG_FILE
-echo 'LAST_POSITION="'"$POSITION"'"' >> $LOG_FILE
+echo 'LAST_BLOCK="'"$LATEST_BLOCK"'"' > $LAST_STATUS_FILE
+echo 'LAST_POWER="'"$VOTING_POWER"'"' >> $LAST_STATUS_FILE
+echo 'LAST_POSITION="'"$POSITION"'"' >> $LAST_STATUS_FILE
 
 if [[ $LAST_POSITION != $POSITION ]]; then
     MSG="position changed $LAST_POSITION -> $POSITION"
