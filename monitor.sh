@@ -17,6 +17,10 @@ echo 'LAST_BLOCK="'"$LATEST_BLOCK"'"' > $LAST_STATUS_FILE
 echo 'LAST_POWER="'"$VOTING_POWER"'"' >> $LAST_STATUS_FILE
 echo 'LAST_POSITION="'"$POSITION"'"' >> $LAST_STATUS_FILE
 
+if [[ $REAL_BLOCK -eq 0 ]]; then
+    MSG="can't connect to $SIDE_RPC"
+fi
+
 if [[ $LAST_POSITION != $POSITION ]]; then
     MSG="position changed $LAST_POSITION -> $POSITION"
 fi
@@ -38,15 +42,11 @@ if [[ $VOTING_POWER -lt 1 ]]; then
 fi
 
 if (( $LATEST_BLOCK < $REAL_BLOCK - 1 )); then
-    MSG="node is unsync, not catching up. $LATEST_BLOCK -> $REAL_BLOCK"
+    MSG="node is unsync. $LATEST_BLOCK -> $REAL_BLOCK"
 fi
 
 if [[ $CATCHING_UP = "true" ]]; then
     MSG="node is unsync, catching up. $LATEST_BLOCK -> $REAL_BLOCK"
-fi
-
-if [[ $REAL_BLOCK -eq 0 ]]; then
-    MSG="can't connect to $SIDE_RPC"
 fi
 
 if [[ $MSG != "" ]]; then
