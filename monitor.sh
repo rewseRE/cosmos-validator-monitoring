@@ -28,9 +28,10 @@ fi
 if [[ $LAST_POWER -ne $VOTING_POWER ]]; then
     DIFF=$(($VOTING_POWER - $LAST_POWER))
     if [[ $DIFF -gt 0 ]]; then
-        DIFF="%2B$DIFF"
+        DIFF="+$DIFF"
     fi
-    MSG="voting power changed $DIFF%0A($LAST_POWER -> $VOTING_POWER)"
+    MSG="voting power changed $DIFF
+($LAST_POWER -> $VOTING_POWER)"
 fi
 
 if [[ $LAST_BLOCK -ge $LATEST_BLOCK ]]; then
@@ -50,6 +51,6 @@ if [[ $CATCHING_UP = "true" ]]; then
 fi
 
 if [[ $MSG != "" ]]; then
-    MSG="$NODE_NAME $MSG"
+    MSG=$(jq -rn --arg str "$NODE_NAME $MSG" '$str | @uri')
     SEND=$(curl -s -X POST -H "Content-Type:multipart/form-data" "https://api.telegram.org/bot$TG_BOT/sendMessage?chat_id=$TG_ID&text=$MSG")
 fi
